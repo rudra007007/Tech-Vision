@@ -1,6 +1,6 @@
 const { useState, useEffect } = React;
 
-const API_BASE = (window.__API_BASE__ || 'http://localhost:5000').replace(/\/+$/, '');
+const API_BASE = 'https://tech-vision-ouy2.onrender.com';
 const API_URL = `${API_BASE}/api`;
 
 function App() {
