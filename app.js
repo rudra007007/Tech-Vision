@@ -153,24 +153,14 @@ function App() {
         <>
             <nav>
                 <div className="logo">
-                    🇮🇳 SevaSahayak
+                    SevaSahayak
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                    <div style={{
-                        fontSize: '0.85rem',
-                        padding: '0.4rem 1rem',
-                        borderRadius: '20px',
-                        background: backendStatus === 'connected' ? '#D4EDDA' : '#F8D7DA',
-                        color: backendStatus === 'connected' ? '#155724' : '#721C24'
-                    }}>
-                        {backendStatus === 'connected' ? '● ONLINE' : '● OFFLINE'}
-                    </div>
-                </div>
+
             </nav>
 
             <div className="container">
                 <div className="hero-section">
-                    <div className="hero-tag">🚀 AI-Powered Welfare Intelligence</div>
+                    <div className="hero-tag"> AI-Powered Welfare Intelligence</div>
                     <h1>
                         From Awareness to<br />
                         <span className="gradient-text">Entitlement</span>
