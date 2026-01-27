@@ -84,17 +84,6 @@ nav {
     gap: 0.5rem;
 }
 
-.profile i {
-color: orangered;
-font-size: 20px;
-cursor: pointer;
-}
-
-
-.profile i:hover {
-color: #d43900;
-}
-
 .container {
     margin-top: 90px;
     padding: 2rem 5%;
