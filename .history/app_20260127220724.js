@@ -193,7 +193,7 @@ function App() {
                     <form onSubmit={handleSubmit}>
                         <div className="form-grid">
                             <div className="input-group">
-                                <label>Age</label>
+                                <label>👤 Age</label>
                                 <input
                                     type="number"
                                     name="age"
@@ -207,7 +207,7 @@ function App() {
                             </div>
 
                             <div className="input-group">
-                                <label>Gender</label>
+                                <label>⚧ Gender</label>
                                 <select
                                     name="gender"
                                     value={formData.gender}
@@ -222,7 +222,7 @@ function App() {
                             </div>
 
                             <div className="input-group">
-                                <label>Annual Income (₹)</label>
+                                <label>💰 Annual Income (₹)</label>
                                 <input
                                     type="number"
                                     name="annual_income"
@@ -235,7 +235,7 @@ function App() {
                             </div>
 
                             <div className="input-group">
-                                <label>State</label>
+                                <label>📍 State</label>
                                 <select
                                     name="state"
                                     value={formData.state}
@@ -248,16 +248,12 @@ function App() {
                                     <option value="Rajasthan">Rajasthan</option>
                                     <option value="Delhi">Delhi</option>
                                     <option value="Karnataka">Karnataka</option>
-                                    <option value="Tamil Nadu">Tamil Nadu</option>
-                                    <option value="Kerala">Kerala</option>
-                                    <option value="Bihar">Bihar</option>
-                                    <option value="West Bengal">West Bengal</option>
-                                    <option value="Punjab">Punjab</option>
+                                    
                                 </select>
                             </div>
 
                             <div className="input-group">
-                                <label>Occupation</label>
+                                <label>💼 Occupation</label>
                                 <select
                                     name="occupation"
                                     value={formData.occupation}
@@ -275,7 +271,7 @@ function App() {
                             </div>
 
                             <div className="input-group">
-                                <label>Category</label>
+                                <label>📊 Category</label>
                                 <select
                                     name="category"
                                     value={formData.category}
@@ -292,7 +288,7 @@ function App() {
                             </div>
 
                             <div className="input-group" style={{ gridColumn: '1 / -1' }}>
-                                <label>Life Event (Optional)</label>
+                                <label>🎭 Life Event (Optional)</label>
                                 <select
                                     name="life_event"
                                     value={formData.life_event}
@@ -316,7 +312,7 @@ function App() {
                                 </>
                             ) : (
                                 <>
-                                    Check Eligibility
+                                    🔍 Check Eligibility
                                 </>
                             )}
                         </button>

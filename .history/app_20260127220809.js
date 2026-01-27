@@ -292,7 +292,7 @@ function App() {
                             </div>
 
                             <div className="input-group" style={{ gridColumn: '1 / -1' }}>
-                                <label>Life Event (Optional)</label>
+                                <label>🎭 Life Event (Optional)</label>
                                 <select
                                     name="life_event"
                                     value={formData.life_event}
@@ -316,7 +316,7 @@ function App() {
                                 </>
                             ) : (
                                 <>
-                                    Check Eligibility
+                                    🔍 Check Eligibility
                                 </>
                             )}
                         </button>

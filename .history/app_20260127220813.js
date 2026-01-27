@@ -316,7 +316,7 @@ function App() {
                                 </>
                             ) : (
                                 <>
-                                    Check Eligibility
+                                    🔍 Check Eligibility
                                 </>
                             )}
                         </button>

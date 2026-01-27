@@ -193,7 +193,7 @@ function App() {
                     <form onSubmit={handleSubmit}>
                         <div className="form-grid">
                             <div className="input-group">
-                                <label>Age</label>
+                                <label>👤 Age</label>
                                 <input
                                     type="number"
                                     name="age"
@@ -257,7 +257,7 @@ function App() {
                             </div>
 
                             <div className="input-group">
-                                <label>Occupation</label>
+                                <label>💼 Occupation</label>
                                 <select
                                     name="occupation"
                                     value={formData.occupation}
@@ -275,7 +275,7 @@ function App() {
                             </div>
 
                             <div className="input-group">
-                                <label>Category</label>
+                                <label>📊 Category</label>
                                 <select
                                     name="category"
                                     value={formData.category}
@@ -292,7 +292,7 @@ function App() {
                             </div>
 
                             <div className="input-group" style={{ gridColumn: '1 / -1' }}>
-                                <label>Life Event (Optional)</label>
+                                <label>🎭 Life Event (Optional)</label>
                                 <select
                                     name="life_event"
                                     value={formData.life_event}
@@ -316,7 +316,7 @@ function App() {
                                 </>
                             ) : (
                                 <>
-                                    Check Eligibility
+                                    🔍 Check Eligibility
                                 </>
                             )}
                         </button>
