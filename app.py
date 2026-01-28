@@ -541,7 +541,8 @@ LIFE_EVENT_MAPPINGS = {
 }
 
 def check_eligibility(user_profile, scheme):
-    """Check if user is eligible for a scheme"""
+    """Check if user is eli
+    3gible for a scheme"""
     eligibility = scheme.get("eligibility", {})
     reasons = []
     eligible = True

@@ -164,7 +164,7 @@ def test_life_event_mapping():
         
         if response.status_code == 200:
             data = response.json()
-            print(f"✅ Life event mapping successful!")
+            print(f" Life event mapping successful!")
             print(f"   Schemes found: {data.get('schemes_found')}")
             
             if data.get('schemes'):
@@ -176,10 +176,10 @@ def test_life_event_mapping():
                     print(f"      Status: {status}")
             return True
         else:
-            print(f"❌ Request failed with status {response.status_code}")
+            print(f" Request failed with status {response.status_code}")
             return False
     except Exception as e:
-        print(f"❌ Error: {str(e)}")
+        print(f" Error: {str(e)}")
         return False
 
 def main():
@@ -206,16 +206,16 @@ def main():
     total = len(results)
     
     for test_name, result in results:
-        status = "✅ PASSED" if result else "❌ FAILED"
+        status = "✅PASSED" if result else "❌ FAILED"
         print(f"{status} - {test_name}")
     
     print()
     print(f"Results: {passed}/{total} tests passed")
     
     if passed == total:
-        print("\n🎉 All tests passed! Backend is working perfectly!")
+        print("\n All tests passed! Backend is working perfectly!")
     else:
-        print("\n⚠️  Some tests failed. Check the output above for details.")
+        print("\n⚠️ Some tests failed. Check the output above for details.")
 
     if server_proc is not None:
         server_proc.terminate()

@@ -160,20 +160,19 @@ function App() {
 
             <div className="container">
                 <div className="hero-section">
-                    <div className="hero-tag"> AI-Powered Welfare Intelligence</div>
+                    <div className="hero-tag">Personalized Welfare Eligibility & Guidance Portal</div>
                     <h1>
-                        From Awareness to<br />
-                        <span className="gradient-text">Entitlement</span>
+                        Har adhikaar<br />
+                        <span className="gradient-text">Sahi haqdaar tak.</span>
                     </h1>
                     <p className="hero-description">
-                        Discover government welfare schemes you're eligible for.
-                        Get personalized recommendations based on your profile and life situation.
+                        A smart AI platform that simplifies government welfare by identifying eligible schemes, explaining them in local language, 
+                        and guiding citizens till application.
                     </p>
                 </div>
 
                 <div className="form-section">
                     <div className="form-header">
-                        <div className="form-icon">🎯</div>
                         <div>
                             <h2 className="form-title">Check Your Eligibility</h2>
                             <p style={{ color: 'var(--text-light)' }}>Fill in your details to find schemes you qualify for</p>
