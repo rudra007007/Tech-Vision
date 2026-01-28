@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - SevaSahayak</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    
+    <nav>
+        <div class="logo">
+            <i class="fas fa-hands-helping"></i>
+            SevaSahayak
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#" id="logoutBtn" class="btn-register">Logout</a>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <div class="profile-sidebar">
+            <div class="profile-avatar">
+                <div class="avatar-circle">
+                    <i class="fas fa-user"></i>
+                </div>
+                <h2 id="userName">Loading...</h2>
+                <p id="userEmail">Loading...</p>
+            </div>
+
+            <div class="profile-menu">
+                <a href="#" class="menu-item active" data-tab="overview">
+                    <i class="fas fa-home"></i>
+                    Overview
+                </a>
+                <a href="#" class="menu-item" data-tab="personal">
+                    <i class="fas fa-user-circle"></i>
+                    Personal Info
+                </a>
+                <a href="#" class="menu-item" data-tab="schemes">
+                    <i class="fas fa-file-alt"></i>
+                    My Schemes
+                </a>
+                <a href="#" class="menu-item" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-content active">
+                <div class="content-header">
+                    <h1>Welcome Back!</h1>
+                    <p>Here's your welfare schemes dashboard</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #FF6B35 0%, #F77F00 100%);">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="eligibleCount">0</h3>
+                            <p>Eligible Schemes</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #004E89 0%, #1A659E 100%);">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="appliedCount">0</h3>
+                            <p>Applications Submitted</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #06A77D 0%, #02C39A 100%);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pendingCount">0</h3>
+                            <p>Pending Reviews</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #9B59B6 0%, #8E44AD 100%);">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="approvedCount">0</h3>
+                            <p>Approved Schemes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h2>Quick Actions</h2>
+                    <div class="actions-grid">
+                        <a href="index.html" class="action-card">
+                            <i class="fas fa-search"></i>
+                            <h3>Find Schemes</h3>
+                            <p>Discover new welfare schemes</p>
+                        </a>
+                        <a href="#" class="action-card" onclick="switchTab('schemes')">
+                            <i class="fas fa-list"></i>
+                            <h3>View Applications</h3>
+                            <p>Track your applications</p>
+                        </a>
+                        <a href="#" class="action-card" onclick="switchTab('personal')">
+                            <i class="fas fa-edit"></i>
+                            <h3>Update Profile</h3>
+                            <p>Keep your info current</p>
+                        </a>
+                        <a href="#" class="action-card">
+                            <i class="fas fa-question-circle"></i>
+                            <h3>Get Help</h3>
+                            <p>Contact support</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Info Tab -->
+            <div id="personal" class="tab-content">
+                <div class="content-header">
+                    <h1>Personal Information</h1>
+                    <p>Manage your account details</p>
+                </div>
+
+                <form id="updateProfileForm" class="profile-form">
+                    <div class="form-section">
+                        <h3>Basic Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editFirstName">First Name</label>
+                                <input type="text" id="editFirstName" name="firstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editLastName">Last Name</label>
+                                <input type="text" id="editLastName" name="lastName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editEmail">Email</label>
+                                <input type="email" id="editEmail" name="email" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="editPhone">Phone</label>
+                                <input type="tel" id="editPhone" name="phone" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editAge">Age</label>
+                                <input type="number" id="editAge" name="age" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editGender">Gender</label>
+                                <select id="editGender" name="gender" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editState">State</label>
+                            <select id="editState" name="state" required>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Bihar">Bihar</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Kerala">Kerala</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </form>
+            </div>
+
+            <!-- My Schemes Tab -->
+            <div id="schemes" class="tab-content">
+                <div class="content-header">
+                    <h1>My Schemes</h1>
+                    <p>Track your scheme applications</p>
+                </div>
+
+                <div class="schemes-list">
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No Applications Yet</h3>
+                        <p>Start by checking your eligibility for welfare schemes</p>
+                        <a href="index.html" class="btn-primary">Find Schemes</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings" class="tab-content">
+                <div class="content-header">
+                    <h1>Settings</h1>
+                    <p>Manage your account preferences</p>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Account Settings</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Email Notifications</h4>
+                            <p>Receive updates about new schemes and applications</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>SMS Notifications</h4>
+                            <p>Get SMS alerts for important updates</p>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Language Preference</h4>
+                            <p>Choose your preferred language</p>
+                        </div>
+                        <select class="setting-select">
+                            <option value="en">English</option>
+                            <option value="hi">हिंदी (Hindi)</option>
+                            <option value="gu">ગુજરાતી (Gujarati)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section danger-zone">
+                    <h3>Danger Zone</h3>
+                    <button class="btn-danger" onclick="deleteAccount()">
+                        <i class="fas fa-trash"></i> Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        // Check if user is logged in
+        const currentUser = getCurrentUser();
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        // Load user data
+        function loadUserData() {
+            const user = getCurrentUser();
+            if (user) {
+                document.getElementById('userName').textContent = `${user.firstName} ${user.lastName}`;
+                document.getElementById('userEmail').textContent = user.email;
+                
+                // Fill edit form
+                document.getElementById('editFirstName').value = user.firstName;
+                document.getElementById('editLastName').value = user.lastName;
+                document.getElementById('editEmail').value = user.email;
+                document.getElementById('editPhone').value = user.phone;
+                document.getElementById('editAge').value = user.age;
+                document.getElementById('editGender').value = user.gender;
+                document.getElementById('editState').value = user.state;
+
+                // Update stats (mock data for now)
+                document.getElementById('eligibleCount').textContent = '12';
+                document.getElementById('appliedCount').textContent = '3';
+                document.getElementById('pendingCount').textContent = '2';
+                document.getElementById('approvedCount').textContent = '1';
+            }
+        }
+
+        loadUserData();
+
+        // Tab switching
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabName = item.getAttribute('data-tab');
+                switchTab(tabName);
+            });
+        });
+
+        function switchTab(tabName) {
+            // Update menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('Are you sure you want to logout?')) {
+                logout();
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Update profile form
+        document.getElementById('updateProfileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const updatedData = {
+                firstName: document.getElementById('editFirstName').value,
+                lastName: document.getElementById('editLastName').value,
+                phone: document.getElementById('editPhone').value,
+                age: parseInt(document.getElementById('editAge').value),
+                gender: document.getElementById('editGender').value,
+                state: document.getElementById('editState').value
+            };
+
+            const result = await updateProfile(updatedData);
+            
+            if (result.success) {
+                alert('Profile updated successfully!');
+                loadUserData();
+            } else {
+                alert('Failed to update profile: ' + result.message);
+            }
+        });
+
+        function deleteAccount() {
+            if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                if (confirm('This will permanently delete all your data. Are you absolutely sure?')) {
+                    logout();
+                    alert('Account deleted successfully');
+                    window.location.href = 'index.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

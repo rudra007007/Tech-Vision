@@ -500,16 +500,6 @@ function App() {
         );
     };
 
-    // Check if user is logged in
-    const [currentUser, setCurrentUser] = React.useState(null);
-
-    React.useEffect(() => {
-        const userStr = localStorage.getItem('currentUser');
-        if (userStr) {
-            setCurrentUser(JSON.parse(userStr));
-        }
-    }, []);
-
     return (
         <>
             <nav className="navbar">
@@ -534,36 +524,6 @@ function App() {
                             </option>
                         ))}
                     </select>
-                    {currentUser ? (
-                        <a href="profile.html" style={{
-                            textDecoration: 'none',
-                            color: 'var(--primary)',
-                            fontWeight: '600',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                        }}>
-                            <i className="fas fa-user-circle" style={{ fontSize: '1.5rem' }}></i>
-                            {currentUser.firstName}
-                        </a>
-                    ) : (
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                            <a href="login.html" style={{
-                                textDecoration: 'none',
-                                color: 'var(--text-dark)',
-                                fontWeight: '500',
-                                padding: '0.5rem 1rem'
-                            }}>Login</a>
-                            <a href="register.html" style={{
-                                textDecoration: 'none',
-                                background: 'var(--gradient-1)',
-                                color: 'white',
-                                fontWeight: '600',
-                                padding: '0.5rem 1.5rem',
-                                borderRadius: '8px'
-                            }}>Register</a>
-                        </div>
-                    )}
                 </div>
             </nav>
 
