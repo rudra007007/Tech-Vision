@@ -4,22 +4,19 @@ import json
 from datetime import datetime
 import torch
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-from IndicTransToolkit import IndicProcessor
 
 app = Flask(__name__)
 CORS(app)
 
 translation_model = None
 translation_tokenizer = None
-ip = None
 
 def initialize_translation():
-    global translation_model, translation_tokenizer, ip
+    global translation_model, translation_tokenizer
     try:
         model_name = "ai4bharat/indictrans2-en-indic-1B"
         translation_tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
         translation_model = AutoModelForSeq2SeqLM.from_pretrained(model_name, trust_remote_code=True)
-        ip = IndicProcessor(inference=True)
         print("Translation model loaded successfully")
     except Exception as e:
         print(f"Error loading translation model: {e}")
@@ -781,6 +778,114 @@ def get_scheme_details(scheme_id):
                 return jsonify(scheme)
     
     return jsonify({"error": "Scheme not found"}), 404
+
+@app.route('/api/translate', methods=['POST'])
+def translate_text():
+    """Translate text from English to Indian regional languages"""
+    try:
+        if translation_model is None:
+            return jsonify({"error": "Translation model not loaded"}), 503
+        
+        data = request.json
+        text = data.get('text', '')
+        target_lang = data.get('target_lang', 'hin_Deva')
+        
+        if not text:
+            return jsonify({"error": "No text provided"}), 400
+        
+        src_lang = "eng_Latn"
+        batch = [f"{src_lang} {text}"]
+        
+        inputs = translation_tokenizer(
+            batch,
+            truncation=True,
+            padding="longest",
+            return_tensors="pt",
+            return_attention_mask=True,
+        )
+        
+        with torch.no_grad():
+            generated_tokens = translation_model.generate(
+                **inputs,
+                use_cache=True,
+                min_length=0,
+                max_length=256,
+                num_beams=5,
+                num_return_sequences=1,
+            )
+        
+        with translation_tokenizer.as_target_tokenizer():
+            generated_tokens = translation_tokenizer.batch_decode(
+                generated_tokens.detach().cpu().tolist(),
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=True,
+            )
+        
+        translated_text = generated_tokens[0]
+        
+        return jsonify({
+            "original": text,
+            "translated": translated_text,
+            "source_lang": "English",
+            "target_lang": target_lang
+        })
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/translate/batch', methods=['POST'])
+def translate_batch():
+    """Translate multiple texts at once"""
+    try:
+        if translation_model is None:
+            return jsonify({"error": "Translation model not loaded"}), 503
+        
+        data = request.json
+        texts = data.get('texts', [])
+        target_lang = data.get('target_lang', 'hin_Deva')
+        
+        if not texts:
+            return jsonify({"error": "No texts provided"}), 400
+        
+        src_lang = "eng_Latn"
+        batch = [f"{src_lang} {text}" for text in texts]
+        
+        inputs = translation_tokenizer(
+            batch,
+            truncation=True,
+            padding="longest",
+            return_tensors="pt",
+            return_attention_mask=True,
+        )
+        
+        with torch.no_grad():
+            generated_tokens = translation_model.generate(
+                **inputs,
+                use_cache=True,
+                min_length=0,
+                max_length=256,
+                num_beams=5,
+                num_return_sequences=1,
+            )
+        
+        with translation_tokenizer.as_target_tokenizer():
+            generated_tokens = translation_tokenizer.batch_decode(
+                generated_tokens.detach().cpu().tolist(),
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=True,
+            )
+        
+        return jsonify({
+            "translations": [
+                {"original": orig, "translated": trans}
+                for orig, trans in zip(texts, generated_tokens)
+            ],
+            "source_lang": "English",
+            "target_lang": target_lang
+        })
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
