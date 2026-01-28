@@ -1,10 +1,31 @@
-from flask import Flask, request, jsonify # pyright: ignore[reportMissingImports]
-from flask_cors import CORS # type: ignore
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import json
 from datetime import datetime
+import torch
+from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+from IndicTransToolkit import IndicProcessor
 
 app = Flask(__name__)
 CORS(app)
+
+translation_model = None
+translation_tokenizer = None
+ip = None
+
+def initialize_translation():
+    global translation_model, translation_tokenizer, ip
+    try:
+        model_name = "ai4bharat/indictrans2-en-indic-1B"
+        translation_tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+        translation_model = AutoModelForSeq2SeqLM.from_pretrained(model_name, trust_remote_code=True)
+        ip = IndicProcessor(inference=True)
+        print("Translation model loaded successfully")
+    except Exception as e:
+        print(f"Error loading translation model: {e}")
+        print("Translation features will be disabled")
+
+initialize_translation()
 
 # Comprehensive scheme database
 SCHEMES_DATABASE = {

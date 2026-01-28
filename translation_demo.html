@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Demo - IndicTrans2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .result h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .translation {
+            font-size: 18px;
+            color: #333;
+            line-height: 1.6;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #667eea;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #fee;
+            border-left-color: #e55;
+            color: #a00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 Translation Demo</h1>
+        <p class="subtitle">Powered by IndicTrans2 - English to Indian Regional Languages</p>
+        
+        <form id="translationForm">
+            <div class="form-group">
+                <label for="text">Enter English Text:</label>
+                <textarea 
+                    id="text" 
+                    placeholder="Type your English text here..."
+                    required
+                >Pradhan Mantri Kisan Samman Nidhi is a government scheme that provides financial assistance to farmers.</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="language">Select Target Language:</label>
+                <select id="language" required>
+                    <option value="hin_Deva">🇮🇳 हिंदी (Hindi)</option>
+                    <option value="guj_Gujr">🇮🇳 ગુજરાતી (Gujarati)</option>
+                    <option value="pan_Guru">🇮🇳 ਪੰਜਾਬੀ (Punjabi)</option>
+                    <option value="ben_Beng">🇮🇳 বাংলা (Bengali)</option>
+                    <option value="mar_Deva">🇮🇳 मराठी (Marathi)</option>
+                    <option value="tam_Taml">🇮🇳 தமிழ் (Tamil)</option>
+                    <option value="tel_Telu">🇮🇳 తెలుగు (Telugu)</option>
+                    <option value="kan_Knda">🇮🇳 ಕನ್ನಡ (Kannada)</option>
+                    <option value="mal_Mlym">🇮🇳 മലയാളം (Malayalam)</option>
+                    <option value="ory_Orya">🇮🇳 ଓଡ଼ିଆ (Odia)</option>
+                </select>
+            </div>
+            
+            <button type="submit" id="translateBtn">Translate Now</button>
+        </form>
+        
+        <div id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p class="loading">Translating your text...</p>
+        </div>
+        
+        <div id="result" style="display: none;" class="result">
+            <h3>Translation:</h3>
+            <div class="translation" id="translatedText"></div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        const form = document.getElementById('translationForm');
+        const loading = document.getElementById('loading');
+        const result = document.getElementById('result');
+        const translatedText = document.getElementById('translatedText');
+        const translateBtn = document.getElementById('translateBtn');
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const text = document.getElementById('text').value;
+            const targetLang = document.getElementById('language').value;
+            
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            translateBtn.disabled = true;
+            
+            try {
+                const response = await fetch(`${API_URL}/translate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        target_lang: targetLang
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Translation failed');
+                }
+                
+                const data = await response.json();
+                
+                translatedText.textContent = data.translated;
+                result.classList.remove('error');
+                result.style.display = 'block';
+                
+            } catch (error) {
+                translatedText.textContent = 'Error: ' + error.message + 
+                    '\n\nMake sure the backend is running on http://localhost:5000';
+                result.classList.add('error');
+                result.style.display = 'block';
+                console.error('Translation error:', error);
+            } finally {
+                loading.style.display = 'none';
+                translateBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

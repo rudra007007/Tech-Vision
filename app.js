@@ -17,6 +17,23 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('eligible');
     const [backendStatus, setBackendStatus] = useState('checking');
+    const [selectedLanguage, setSelectedLanguage] = useState('eng_Latn');
+    const [translating, setTranslating] = useState(false);
+    const [translatedResults, setTranslatedResults] = useState(null);
+
+    const languages = [
+        { code: 'eng_Latn', name: 'English', flag: '🇬🇧' },
+        { code: 'hin_Deva', name: 'हिंदी (Hindi)', flag: '🇮🇳' },
+        { code: 'guj_Gujr', name: 'ગુજરાતી (Gujarati)', flag: '🇮🇳' },
+        { code: 'pan_Guru', name: 'ਪੰਜਾਬੀ (Punjabi)', flag: '🇮🇳' },
+        { code: 'ben_Beng', name: 'বাংলা (Bengali)', flag: '🇮🇳' },
+        { code: 'mar_Deva', name: 'मराठी (Marathi)', flag: '🇮🇳' },
+        { code: 'tam_Taml', name: 'தமிழ் (Tamil)', flag: '🇮🇳' },
+        { code: 'tel_Telu', name: 'తెలుగు (Telugu)', flag: '🇮🇳' },
+        { code: 'kan_Knda', name: 'ಕನ್ನಡ (Kannada)', flag: '🇮🇳' },
+        { code: 'mal_Mlym', name: 'മലയാളം (Malayalam)', flag: '🇮🇳' },
+        { code: 'ory_Orya', name: 'ଓଡ଼ିଆ (Odia)', flag: '🇮🇳' },
+    ];
 
     useEffect(() => {
         fetch(`${API_URL}/health`)
@@ -33,10 +50,80 @@ function App() {
         }));
     };
 
+    const translateScheme = async (scheme) => {
+        if (selectedLanguage === 'eng_Latn') return scheme;
+
+        try {
+            const textsToTranslate = [
+                scheme.name,
+                scheme.benefit,
+                scheme.category,
+                ...scheme.eligibility_status.reasons,
+                ...scheme.documents
+            ];
+
+            const response = await fetch(`${API_URL}/translate/batch`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    texts: textsToTranslate,
+                    target_lang: selectedLanguage
+                })
+            });
+
+            const data = await response.json();
+            const translations = data.translations.map(t => t.translated);
+
+            let idx = 0;
+            return {
+                ...scheme,
+                name: translations[idx++],
+                benefit: translations[idx++],
+                category: translations[idx++],
+                eligibility_status: {
+                    ...scheme.eligibility_status,
+                    reasons: scheme.eligibility_status.reasons.map(() => translations[idx++])
+                },
+                documents: scheme.documents.map(() => translations[idx++])
+            };
+        } catch (error) {
+            console.error('Translation error:', error);
+            return scheme;
+        }
+    };
+
+    const handleLanguageChange = async (langCode) => {
+        setSelectedLanguage(langCode);
+        if (results && langCode !== 'eng_Latn') {
+            setTranslating(true);
+            try {
+                const translatedEligible = await Promise.all(
+                    results.eligible_schemes.map(scheme => translateScheme(scheme))
+                );
+                const translatedIneligible = await Promise.all(
+                    results.ineligible_schemes.map(scheme => translateScheme(scheme))
+                );
+                
+                setTranslatedResults({
+                    ...results,
+                    eligible_schemes: translatedEligible,
+                    ineligible_schemes: translatedIneligible
+                });
+            } catch (error) {
+                console.error('Translation failed:', error);
+            } finally {
+                setTranslating(false);
+            }
+        } else {
+            setTranslatedResults(null);
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setResults(null);
+        setTranslatedResults(null);
 
         try {
             const response = await fetch(`${API_URL}/schemes/check-eligibility`, {
@@ -56,7 +143,6 @@ function App() {
             const data = await response.json();
             setResults(data);
 
-            // Scroll to results
             setTimeout(() => {
                 document.getElementById('results')?.scrollIntoView({ behavior: 'smooth' });
             }, 100);
@@ -153,8 +239,26 @@ function App() {
         <>
             <nav className="navbar">
                 <div className="logo">SevaSahayak</div>
-                <div className="profile" onClick={() => setShowProfileModal(true)}>
-                    <i className="fa-solid fa-user"></i>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <select 
+                        value={selectedLanguage}
+                        onChange={(e) => handleLanguageChange(e.target.value)}
+                        style={{
+                            padding: '0.5rem 1rem',
+                            borderRadius: '8px',
+                            border: '2px solid var(--primary)',
+                            background: 'white',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            fontWeight: '500'
+                        }}
+                    >
+                        {languages.map(lang => (
+                            <option key={lang.code} value={lang.code}>
+                                {lang.flag} {lang.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
             </nav>
 
@@ -321,11 +425,20 @@ function App() {
                     </div>
                 )}
 
+                {translating && (
+                    <div className="loading">
+                        <div className="spinner"></div>
+                        <p style={{ color: 'var(--text-light)' }}>
+                            Translating results to {languages.find(l => l.code === selectedLanguage)?.name}...
+                        </p>
+                    </div>
+                )}
+
                 {results && (
                     <div className="results-section" id="results">
                         <div className="results-header">
                             <h2 style={{ fontSize: '2rem', marginBottom: '1rem' }}>
-                                Your Personalized Results
+                                {selectedLanguage === 'eng_Latn' || !translatedResults ? 'Your Personalized Results' : languages.find(l => l.code === selectedLanguage)?.name + ' Results'}
                             </h2>
                             <div className="results-stats">
                                 <div className="stat">
@@ -357,8 +470,8 @@ function App() {
 
                             {activeTab === 'eligible' && (
                                 <div>
-                                    {results.eligible_schemes.length > 0 ? (
-                                        results.eligible_schemes.map(scheme => (
+                                    {(translatedResults?.eligible_schemes || results.eligible_schemes).length > 0 ? (
+                                        (translatedResults?.eligible_schemes || results.eligible_schemes).map(scheme => (
                                             <SchemeCard key={scheme.id} scheme={scheme} isEligible={true} />
                                         ))
                                     ) : (
@@ -373,8 +486,8 @@ function App() {
 
                             {activeTab === 'ineligible' && (
                                 <div>
-                                    {results.ineligible_schemes.length > 0 ? (
-                                        results.ineligible_schemes.map(scheme => (
+                                    {(translatedResults?.ineligible_schemes || results.ineligible_schemes).length > 0 ? (
+                                        (translatedResults?.ineligible_schemes || results.ineligible_schemes).map(scheme => (
                                             <SchemeCard key={scheme.id} scheme={scheme} isEligible={false} />
                                         ))
                                     ) : (
